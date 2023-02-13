@@ -82,6 +82,8 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
         private ImageButton list_IMG_add;
         private ImageButton list_IMG_delete;
         private ImageButton list_IMG_chat;
+        private int pos = getAdapterPosition();
+
 //        private AppCompatImageView song_IMG_image;
 
         public ClassViewHolder(View itemView) {
@@ -123,9 +125,32 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
 //            song_LBL_name = itemView.findViewById(R.id.song_LBL_name);
 //            song_IMG_image = itemView.findViewById(R.id.song_IMG_image);
 
+            DatabaseReference ref = FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_LESSON).child(String.valueOf(pos)).child("notes");
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String result = "";
+                    for (DataSnapshot snap:snapshot.getChildren()) {
+                        result += snap.getValue(String.class) + ", " ;
+                    }
+//                                Log.d("pttt", snapshot.toString());
+//                                ArrayList<String> notes = snapshot.getValue(ArrayList.class);
+                    list_LBL_teachernotes.setText(result);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
         }
 
-            private void initAddNotePopup() {
+        private void setPos(int pos) {
+            this.pos = pos;
+        }
+
+        private void initAddNotePopup() {
 
 //                // inflate the layout of the popup window
                 LayoutInflater inflater = (LayoutInflater) systemService;
@@ -145,50 +170,21 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
                 ImageButton pop_BTN_add = popupView.findViewById(R.id.pop_BTN_add);
                 ImageButton pop_BTN_cancel = popupView.findViewById(R.id.pop_BTN_cancel);
 
+                int pos = getAdapterPosition();
+
                 pop_BTN_add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //update view
                         String note = pop_ET_note.getText().toString();
-                        int pos = getAdapterPosition();
                         Lesson clickedLesson = aLessons.get(pos);
                         clickedLesson.addNote(note);
-
-
-                        DatabaseReference ref = FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_LESSON).child(String.valueOf(pos)).child("notes");
-                        ref.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                String result = "";
-                                for (DataSnapshot snap:snapshot.getChildren()) {
-                                    result += snap.getValue(String.class) + ", " ;
-                                }
-//                                Log.d("pttt", snapshot.toString());
-//                                ArrayList<String> notes = snapshot.getValue(ArrayList.class);
-                                list_LBL_teachernotes.setText(result);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-
-//                        FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_TEACHER).addValueEventListener(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                                list_LBL_teachernotes.setText(clickedLesson.getNotes().toString());
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError error) {
-//
-//                            }
-//                        });
+                        setPos(getAdapterPosition());
 
                         //update firebase
                         FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_LESSON).child(String.valueOf(pos)).child("notes").setValue(clickedLesson.getNotes());
                         FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_TEACHER).child(currentUser.getUid()).child("Lessons").child(String.valueOf(pos)).child("notes").setValue(clickedLesson.getNotes());
+
                     }
                 });
 
