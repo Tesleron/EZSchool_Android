@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_login);
-//        saveGarage();
+        saveGarage();
 //        FirebaseUser user = mAuth.getCurrentUser();
 //        if (user == null){
 //            login(currentUser);

@@ -159,8 +159,13 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
                         ref.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                Log.d("pttt", snapshot.toString());
-                                list_LBL_teachernotes.setText(snapshot.getValue(ArrayList.class).toString());
+                                String result = "";
+                                for (DataSnapshot snap:snapshot.getChildren()) {
+                                    result += snap.getValue(String.class) + ", " ;
+                                }
+//                                Log.d("pttt", snapshot.toString());
+//                                ArrayList<String> notes = snapshot.getValue(ArrayList.class);
+                                list_LBL_teachernotes.setText(result);
                             }
 
                             @Override
