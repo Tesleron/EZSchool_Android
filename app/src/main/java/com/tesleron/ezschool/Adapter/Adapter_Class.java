@@ -153,6 +153,18 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
                         Lesson clickedLesson = aLessons.get(pos);
                         clickedLesson.addNote(note);
 
+                        FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_STUDENT).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                list_LBL_teachernotes.setText(clickedLesson.getNotes().toString());
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
                         FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_TEACHER).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
