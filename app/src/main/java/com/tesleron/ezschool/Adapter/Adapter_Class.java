@@ -20,6 +20,9 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.tesleron.ezschool.Model.Lesson;
 import com.tesleron.ezschool.MyUtils.Constants;
 import com.tesleron.ezschool.MyUtils.FireBaseOperations;
@@ -149,7 +152,18 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
                         int pos = getAdapterPosition();
                         Lesson clickedLesson = aLessons.get(pos);
                         clickedLesson.addNote(note);
-                        list_LBL_teachernotes.setText(clickedLesson.getNotes().toString());
+
+                        FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_TEACHER).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                list_LBL_teachernotes.setText(clickedLesson.getNotes().toString());
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
 
                         //update firebase
                         FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_LESSON).child(String.valueOf(pos)).child("notes").setValue(clickedLesson.getNotes());
