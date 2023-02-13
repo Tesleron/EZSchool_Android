@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.tesleron.ezschool.Model.Lesson;
 import com.tesleron.ezschool.MyUtils.Constants;
@@ -153,10 +154,13 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
                         Lesson clickedLesson = aLessons.get(pos);
                         clickedLesson.addNote(note);
 
-                        FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_STUDENT).addValueEventListener(new ValueEventListener() {
+
+                        DatabaseReference ref = FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_LESSON).child(String.valueOf(pos)).child("notes");
+                        ref.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                list_LBL_teachernotes.setText(clickedLesson.getNotes().toString());
+                                Log.d("pttt", snapshot.toString());
+                                list_LBL_teachernotes.setText(snapshot.getValue(ArrayList.class).toString());
                             }
 
                             @Override
@@ -165,17 +169,17 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
                             }
                         });
 
-                        FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_TEACHER).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                list_LBL_teachernotes.setText(clickedLesson.getNotes().toString());
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
+//                        FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_TEACHER).addValueEventListener(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                list_LBL_teachernotes.setText(clickedLesson.getNotes().toString());
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError error) {
+//
+//                            }
+//                        });
 
                         //update firebase
                         FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_LESSON).child(String.valueOf(pos)).child("notes").setValue(clickedLesson.getNotes());
