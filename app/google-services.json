@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "908941481387",
+    "firebase_url": "https://ezschool-9d756-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "ezschool-9d756",
+    "storage_bucket": "ezschool-9d756.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908941481387:android:f991e40fd81ba04c98eeee",
+        "android_client_info": {
+          "package_name": "com.tesleron.ezschool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "908941481387-bvuj0a6shu3lsr19llbkapb5q8tk6puq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tesleron.ezschool",
+            "certificate_hash": "3fbaa1e7a85a0f1b3c781926b11dc6a923a11dfa"
+          }
+        },
+        {
+          "client_id": "908941481387-jqjie2rlfl1ep4kf0kqcn0n4rbodkea3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvTt7rUtZNrHI_pGZ62yjCee7oLu-l1k0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "908941481387-j4qu5mv1ei991nqfm2fvgrhhd083u733.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

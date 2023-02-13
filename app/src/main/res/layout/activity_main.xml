@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:id="@+id/activity_main"
+    android:keepScreenOn="true">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ezschool_IMG_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFDD0"
+        app:srcCompat="@drawable/ezschool_icon"
+        android:alpha="0.6"
+        />
+
+
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/main_LAY_texts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/main_LBL_hello"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="Hello, "
+                android:gravity="center"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/main_LBL_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="inputname"
+                android:gravity="center"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/main_LBL_schedule"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Your schedule for today is:"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            >
+
+        </com.google.android.material.textview.MaterialTextView>
+
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/main_LST_classes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/main_LAY_texts"/>
+
+
+</RelativeLayout>
