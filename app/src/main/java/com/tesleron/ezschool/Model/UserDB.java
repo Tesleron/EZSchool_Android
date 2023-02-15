@@ -6,12 +6,12 @@ import java.util.ArrayList;
 
 public class UserDB {
     protected String displayName;
-    protected ArrayList<Lesson> lessons;
+//    protected ArrayList<Lesson> lessons;
 //    private static UserDB userDB = null;
 
 
     public UserDB() {
-        lessons = DataManager.getClasses();
+       // lessons = DataManager.getClasses();
     }
 
 //    protected UserDB(FirebaseUser currentUser) {
@@ -41,13 +41,13 @@ public class UserDB {
         this.displayName = displayName;
     }
 
-    public ArrayList<Lesson> getClasses() {
-        return lessons;
-    }
+//    public ArrayList<Lesson> getClasses() {
+//        return lessons;
+//    }
 
-    public void setClasses(ArrayList<Lesson> lessons) {
-        this.lessons = lessons;
-    }
+//    public void setClasses(ArrayList<Lesson> lessons) {
+//        this.lessons = lessons;
+//    }
 
 
 }

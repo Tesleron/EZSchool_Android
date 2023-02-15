@@ -102,16 +102,8 @@
             android:text="Add Note"
             android:textSize="10sp"
             android:layout_below="@id/list_LBL_teachernotes"
-            android:layout_toStartOf="@id/redpoint"
+            android:layout_toStartOf="@id/list_IMG_delete"
             />
-
-<!--        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_toStartOf="@+id/list_LBL_comments"-->
-<!--            android:layout_below="@+id/list_LBL_teachernotes"-->
-<!--            -->
-<!--            ></com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>-->
 
         <ImageButton
             android:id="@+id/list_IMG_chat"
@@ -126,28 +118,15 @@
             android:background="@drawable/commentsection"
             ></ImageButton>
 
-<!--        <androidx.appcompat.widget.AppCompatImageView-->
-<!--            android:id="@+id/list_IMG_chat"-->
-<!--            style="@android:style/Widget.ActionButton"-->
-<!--            android:layout_width="16dp"-->
-<!--            android:layout_height="16dp"-->
-<!--            android:layout_below="@id/list_LBL_teachernotes"-->
-<!--            android:layout_marginStart="10dp"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:layout_marginEnd="5dp"-->
-<!--            android:layout_marginBottom="10dp"-->
-<!--            android:layout_toStartOf="@+id/list_LBL_comments"-->
-<!--            app:srcCompat="@drawable/commentsection"-->
-<!--            ></androidx.appcompat.widget.AppCompatImageView>-->
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/list_LBL_comments"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:text="Comment Section"
+            android:text="Chat Room"
             android:textSize="10sp"
-            android:layout_toStartOf="@id/list_IMG_delete"
+            android:layout_toStartOf="@id/redpoint"
             android:layout_alignBottom="@id/song_IMG_like"
             ></com.google.android.material.textview.MaterialTextView>
 
@@ -171,7 +150,7 @@
             android:layout_marginEnd="10dp"
             android:text="Delete Note"
             android:textSize="10sp"
-            android:layout_toStartOf="@id/list_IMG_add"
+            android:layout_toStartOf="@id/list_IMG_chat"
             android:layout_alignBottom="@id/song_IMG_like"
             ></com.google.android.material.textview.MaterialTextView>
 

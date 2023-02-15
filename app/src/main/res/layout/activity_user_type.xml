@@ -44,44 +44,109 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="horizontal"
-            android:layout_weight="4"
+            android:layout_weight="2"
             android:padding="20dp"
 
             >
-            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                android:id="@+id/type_BTN_pupil"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="20dp"
-                android:layout_weight="1"
-                android:backgroundTint="#4AFFFDD0"
-                app:icon="@drawable/pupil_icon"
                 >
 
-            </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/type_IMG_pupil"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/pupil_icon"
+                    android:layout_marginStart="50dp"
+                    ></androidx.appcompat.widget.AppCompatImageView>
 
-            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                android:id="@+id/type_BTN_teacher"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:backgroundTint="#4AFFFDD0"
-                app:icon="@drawable/teacher_icon"
-                >
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/type_BTN_pupil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:backgroundTint="#4AFFFDD0"
+                    android:layout_below="@id/type_IMG_pupil"
+                    android:layout_marginStart="40dp"
+                    android:text="Student"
+                    android:layout_marginTop="15dp"
+                    >
 
-            </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
+                </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/type_IMG_teacher"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/teacher_icon"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="50dp"
+                    ></androidx.appcompat.widget.AppCompatImageView>
 
+                    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                        android:id="@+id/type_BTN_teacher"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#4AFFFDD0"
+                        android:text="Teacher"
+                        android:layout_below="@id/type_IMG_teacher"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="40dp"
+                        android:layout_marginTop="15dp"
+                        >
+
+                    </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
+            </RelativeLayout>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/type_LAY_top"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_weight="4"
             android:orientation="horizontal"
-            android:layout_weight="1"
 
             >
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                >
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animation_pupil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="170dp"
+                    android:layout_marginEnd="20dp"
+                    app:lottie_rawRes="@raw/pupil_animation"
+                    app:lottie_speed="1"
+                    app:lottie_repeatMode="restart"
+                    />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                >
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animation_teacher"
+                    android:layout_width="255dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="170dp"
+                    android:layout_marginStart="10dp"
+                    app:lottie_rawRes="@raw/teacher_animation"
+                    app:lottie_speed="1"
+                    app:lottie_repeatMode="restart"
+                    />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>

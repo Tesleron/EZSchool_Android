@@ -18,6 +18,15 @@
         android:alpha="0.6"
         />
 
+    <ImageButton
+        android:id="@+id/main_BTN_signout"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:background="@drawable/logout_icon"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="22dp"
+        ></ImageButton>
+
 
 
     <androidx.appcompat.widget.LinearLayoutCompat

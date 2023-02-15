@@ -7,9 +7,11 @@ public class Lesson {
     private int startTime;
     private int endTime;
     private ArrayList<String> notes;
+    private ArrayList<String> chatMsgs;
 
     public Lesson(){
         notes = new ArrayList<>();
+        chatMsgs = new ArrayList<>();
     }
 
     public String getName() {
@@ -41,6 +43,10 @@ public class Lesson {
 
     public ArrayList<String> getNotes() {
         return notes;
+    }
+
+    public ArrayList<String> getMsgs() {
+        return chatMsgs;
     }
 
     public Lesson addNote(String note) {

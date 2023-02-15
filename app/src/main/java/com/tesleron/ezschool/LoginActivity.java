@@ -22,8 +22,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.tesleron.ezschool.Model.Lesson;
+import com.tesleron.ezschool.Model.LessonStorage;
 import com.tesleron.ezschool.Model.StudentUser;
 import com.tesleron.ezschool.Model.TeacherUser;
+import com.tesleron.ezschool.Model.TypeOfUser;
 import com.tesleron.ezschool.Model.UserDB;
 import com.tesleron.ezschool.MyUtils.Constants;
 import com.tesleron.ezschool.MyUtils.FireBaseOperations;
@@ -50,24 +52,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_login);
-        saveGarage();
-//        FirebaseUser user = mAuth.getCurrentUser();
-//        if (user == null){
-//            login(currentUser);
-//        }else{
-//            Log.d("pttt","reached here if current user exists");
-//            String uid = user.getUid();
-// //           String phone = user.getPhoneNumber();
-//            String name = user.getDisplayName();
-//            String email = user.getEmail();
-//            int x= 0;
-//            Intent intent = new Intent(this, MainActivity.class);
-//            intent.putExtra(Constants.KEY_NAME, name);
-//            intent.putExtra(Constants.KEY_EMAIL, email);
-//            startActivity(intent);
-//            finish();
-//        }
-
+        LessonStorage.init();
+//        saveGarage();
     }
 
     private void saveGarage(){
@@ -170,10 +156,10 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void switchActivity(int typeOfUser) {
+    private void switchActivity(TypeOfUser type) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(Constants.KEY_NAME, currentUser.getDisplayName());
-        intent.putExtra(Constants.KEY_TYPE, typeOfUser);
+        type.attachTo(intent);
         startActivity(intent);
         finish();
     }
@@ -181,7 +167,7 @@ public class LoginActivity extends AppCompatActivity {
     private void loadStudentUserFromDB(DatabaseReference reference) {
         StudentUser.init(currentUser);
         reference = reference.child(currentUser.getUid());
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 StudentUser.getInstance().setUser(snapshot.getValue(UserDB.class));
@@ -195,14 +181,16 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         DatabaseReference finalReference = reference;
-        lessonReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        lessonReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //LessonStorage.getInstance().getClasses().clear();
                 for (DataSnapshot snap:snapshot.getChildren()) {
                     Lesson l = snap.getValue(Lesson.class);
-                    StudentUser.getInstance().getClasses().add(l);
+                    LessonStorage.getInstance().getClasses().add(l);
+                    //StudentUser.getInstance().getClasses().add(l);
                 }
-                    finalReference.child("Lessons").setValue(StudentUser.getInstance().getClasses());
+                   // finalReference.child(Constants.KEY_MY_LESSONS).setValue(StudentUser.getInstance().getClasses());
             }
 
             @Override
@@ -211,7 +199,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        switchActivity(0);
+  //      switchActivity(0);
+        switchActivity(TypeOfUser.STUDENT);
     }
 
     private void loadTeacherUserFromDB(DatabaseReference reference) {
@@ -230,14 +219,16 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         DatabaseReference finalReference = reference;
-        lessonReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        lessonReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //LessonStorage.getInstance().getClasses().clear();
                 for (DataSnapshot snap:snapshot.getChildren()) {
                     Lesson l = snap.getValue(Lesson.class);
-                    TeacherUser.getInstance().getClasses().add(l);
+                    LessonStorage.getInstance().getClasses().add(l);
+                    //TeacherUser.getInstance().getClasses().add(l);
                 }
-                    finalReference.child("Lessons").setValue(TeacherUser.getInstance().getClasses());
+                    //finalReference.child(Constants.KEY_MY_LESSONS).setValue(TeacherUser.getInstance().getClasses());
             }
 
             @Override
@@ -246,7 +237,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        switchActivity(1);
+        switchActivity(TypeOfUser.TEACHER);
     }
 
     private void checkAlreadyExists() {
@@ -305,23 +296,6 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, UserTypeActivity.class); // if the user is completely new, ask what type of user he is.
         startActivity(intent);
         finish();
-
-//        int result = intent.getExtras().getInt(Constants.KEY_TYPE);
-//        if (result == 0)
-//        {
-//            StudentUser.init(currentUser);
-//            StudentUser.getInstance().setClasses(DataManager.getClasses());
-//            studentReference.child(currentUser.getUid()).setValue(StudentUser.getInstance());
-//        }
-//
-//        else
-//        {
-//            TeacherUser.init(currentUser);
-//            TeacherUser.getInstance().setClasses(DataManager.getClasses());
-//            teacherReference.child(currentUser.getUid()).setValue(TeacherUser.getInstance());
-//        }
-
-
         // TEMPORARY!!
     }
 

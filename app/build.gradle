@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.tesleron.ezschool"
-        minSdk 24
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -52,5 +52,8 @@ dependencies {
     // auth
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
+
+    // Lottie animation
+    implementation 'com.airbnb.android:lottie:5.2.0'
 
 }
