@@ -16,7 +16,6 @@ public class FireBaseOperations {
 
     public FireBaseOperations(){
         database = FirebaseDatabase.getInstance("https://ezschool-9d756-default-rtdb.europe-west1.firebasedatabase.app/");
-
     }
 
     public static FireBaseOperations getInstance(){

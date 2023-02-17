@@ -1,15 +1,97 @@
 package com.tesleron.ezschool.Model;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+import com.tesleron.ezschool.MyUtils.Constants;
+import com.tesleron.ezschool.MyUtils.FireBaseOperations;
 
 import java.util.ArrayList;
+import java.util.Observable;
 
-public class LessonStorage {
+public class LessonStorage extends Observable {
     private static LessonStorage lessonStorage = null;
-    private ArrayList<Lesson> lessons;
+    private MutableLiveData<ArrayList<Lesson>> lessons;
+    DatabaseReference lessonReference = FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_LESSON);
 
     private LessonStorage() {
-        lessons = new ArrayList<>();
+        lessons = new MutableLiveData<>();
+
+        ArrayList<Lesson> theLessons = new ArrayList<>();
+        lessonReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Lesson l = snapshot.getValue(Lesson.class);
+//                Log.d("pttt", l.getNotes().toString());
+//                Log.d("pttt", l.getMsgs().toString());
+                theLessons.add(l);
+                lessons.setValue(theLessons);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//                Lesson l = snapshot.getValue(Lesson.class);
+//                theLessons.add(l);
+//                lessons.setValue(theLessons);
+//                Lesson l = snapshot.getValue(Lesson.class);
+//                for (Lesson lesson : theLessons){
+//                    if (lesson.getName().equals(l.getName())) {
+//                        int index = theLessons.indexOf(lesson);
+//                        theLessons.set(index, l);
+//                    }
+//                }
+//                        lessons.setValue(theLessons);
+            }
+
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        lessonReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //LessonStorage.getInstance().getClasses().clear();
+                ArrayList<Lesson> lessons = new ArrayList<>();
+                for (DataSnapshot snap:snapshot.getChildren()) {
+                    Lesson l = snap.getValue(Lesson.class);
+                    lessons.add(l);
+                    Log.d("pttt", l.getNotes().toString());
+                    Log.d("pttt", l.getChatMsgs().toString());
+                }
+                LessonStorage.getInstance().setLessons(lessons);
+
+                //finalReference.child(Constants.KEY_MY_LESSONS).setValue(TeacherUser.getInstance().getClasses());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     public static void init(){
@@ -20,8 +102,12 @@ public class LessonStorage {
 
     public static LessonStorage getInstance(){return lessonStorage;}
 
-    public ArrayList<Lesson> getClasses() {
+    public LiveData<ArrayList<Lesson>> getClasses() {
         return lessons;
+    }
+
+    public void setLessons (ArrayList<Lesson> newLessons) {
+        lessons.setValue(newLessons);
     }
 
 }

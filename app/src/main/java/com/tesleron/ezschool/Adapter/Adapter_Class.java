@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
+import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,6 +31,7 @@ import com.tesleron.ezschool.Model.LessonStorage;
 import com.tesleron.ezschool.Model.TypeOfUser;
 import com.tesleron.ezschool.MyUtils.Constants;
 import com.tesleron.ezschool.MyUtils.FireBaseOperations;
+import com.tesleron.ezschool.MyUtils.MySignal;
 import com.tesleron.ezschool.MyUtils.MyStringUtils;
 import com.tesleron.ezschool.R;
 
@@ -41,18 +42,18 @@ import java.util.ArrayList;
 public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewHolder> {
 
     private Context context;
-   // private ArrayList<Lesson> aLessons;
-    private View parentView;
-    private Object systemService;
+    private ArrayList<Lesson> aLessons;
     private DatabaseReference ref = FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_LESSON);
 
+    private Handler handler;
+    private Runnable runnable;
 
-    public Adapter_Class(Context context/*, ArrayList<Lesson> aLessons, View activityView, Object systemService*/) {
+
+    public Adapter_Class(Context context) {
         this.context = context;
-      //  this.aLessons = aLessons;
-      //  parentView = activityView;
-      //  this.systemService = systemService;
-
+        aLessons = new ArrayList<>();
+        handler = new Handler();
+        handler.postDelayed(runnable, 10); // start refreshing every 10ms, which is all the time
     }
 
     @Override
@@ -64,23 +65,36 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
 
     @Override
     public void onBindViewHolder(@NonNull ClassViewHolder holder, int position) {
-        Lesson aLesson = LessonStorage.getInstance().getClasses().get(position);
-        //Lesson aLesson = aLessons.get(position);
+        Lesson aLesson = getItem(position);
         holder.list_LBL_name.setText(aLesson.getName());
         holder.list_LBL_duration.setText(MyStringUtils.getDurationFromation(aLesson.getStartTime()) + "-" + MyStringUtils.getDurationFromation(aLesson.getEndTime()));
         holder.list_LBL_teachernotes.setText(aLesson.getNotes().toString());
 
     }
 
-    @Override
-    public int getItemCount() {
-        return LessonStorage.getInstance().getClasses() == null ? 0 : LessonStorage.getInstance().getClasses().size();
+    private Lesson getItem(int position) {
+        return aLessons.get(position);
     }
 
-//    public void updateLessons(final ArrayList<Lesson> newLessons) {
-//        aLessons = newLessons;
-//        notifyDataSetChanged(); // calls the onChanged method of Observer
-//    }
+    @Override
+    public int getItemCount() {
+        return aLessons == null ? 0 : aLessons.size();
+    }
+
+    public void updateLessons(final ArrayList<Lesson> newLessons) {
+        aLessons = newLessons;
+//        runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                for (Lesson l : aLessons)
+//                {
+//                    if (l.getLessonListView() != null)
+//                        l.getLessonListView().invalidateViews();
+//                }
+//            }
+//        };
+        notifyDataSetChanged();
+    }
 
     class ClassViewHolder extends RecyclerView.ViewHolder {
 
@@ -94,8 +108,6 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
         private final ImageButton list_IMG_chat;
         private int pos;
         private DatabaseReference lessonReference = FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_LESSON);
-
-//        private AppCompatImageView song_IMG_image;
 
         public ClassViewHolder(View itemView) {
             super(itemView);
@@ -158,13 +170,18 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
                     //update view
                     String note = pop_ET_note.getText().toString();
                     pos = getAdapterPosition();
-                    Lesson clickedLesson = LessonStorage.getInstance().getClasses().get(pos);
+                    Lesson clickedLesson = aLessons.get(pos);
                     clickedLesson.addNote(note);
+                    dialog.dismiss();
+
+                    MySignal.getInstance().toast("Successfully added note");
 
                     //update firebase
-                    FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_LESSON).child(String.valueOf(pos)).child("notes").setValue(clickedLesson.getNotes());
- //                   FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_TEACHER).child(currentUser.getUid()).child("Lessons").child(String.valueOf(pos)).child("notes").setValue(clickedLesson.getNotes());
-
+                    FireBaseOperations.getInstance()
+                            .getDatabaseReference(Constants.KEY_LESSON)
+                            .child(String.valueOf(pos))
+                            .child("notes")
+                            .setValue(clickedLesson.getNotes());
                 }
             });
 
@@ -178,7 +195,7 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
 
         private void initDeleteNotePopup() {
             pos = getAdapterPosition();
-            Lesson clickedLesson = LessonStorage.getInstance().getClasses().get(pos);
+            Lesson clickedLesson = aLessons.get(pos);
             ArrayList<String> currentNotes = clickedLesson.getNotes(); // load from DB instead
 
             // open the popup
@@ -198,13 +215,19 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                     String chosenNote = currentNotes.get(position);
                     currentNotes.remove(chosenNote);
-                    notesLv.requestLayout();
- //                   notifyDataSetChanged();
+
+                    MySignal.getInstance().toast("Successfully deleted note");
+
+                    //                   notifyDataSetChanged();
 
                     // update FB on whats happening
-                    FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_LESSON).child(String.valueOf(pos)).child("notes").setValue(clickedLesson.getNotes());
-//                    FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_TEACHER).child(currentUser.getUid()).child("Lessons").child(String.valueOf(pos)).child("notes").setValue(clickedLesson.getNotes());
+                    FireBaseOperations.getInstance()
+                            .getDatabaseReference(Constants.KEY_LESSON)
+                            .child(String.valueOf(pos))
+                            .child("notes")
+                            .setValue(clickedLesson.getNotes());
 
+                    notesLv.requestLayout();
                 }
             });
 
@@ -212,23 +235,27 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
 
         private void initChatPopup() {
             pos = getAdapterPosition();
-            Lesson clickedLesson = LessonStorage.getInstance().getClasses().get(pos);
-
+            Lesson clickedLesson = aLessons.get(pos);
+            ArrayList<String> currentMsgs = clickedLesson.getChatMsgs(); // load from DB instead
             // open the popup
             final Dialog dialog = new Dialog(context);
             dialog.setContentView(R.layout.popup_chatroom);
-            ListView messagesLv = (ListView) dialog.findViewById(R.id.pop_CHT_msgs);
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.row_in_listview, clickedLesson.getMsgs()); // should instead load from DB
-            messagesLv.setAdapter(adapter);
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            dialog.show();
+            dialog.setTitle("Chat Room");
+            //ListView messagesLv = (ListView) dialog.findViewById(R.id.pop_CHT_msgs);
+            clickedLesson.setLessonListView(dialog, R.id.pop_CHT_msgs);
 
             TextView pop_CHT_title = dialog.findViewById(R.id.pop_CHT_title);
             EditText pop_CHT_ET = dialog.findViewById(R.id.pop_CHT_ET);
             ImageButton pop_CHT_send = dialog.findViewById(R.id.pop_CHT_send);
 
             pop_CHT_title.setText(clickedLesson.getName() + " chat room!");
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.row_in_listview, currentMsgs); // should instead load from DB
+            //messagesLv.setAdapter(adapter);
+            clickedLesson.getLessonListView().setAdapter(adapter);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dialog.show();
+
             pop_CHT_send.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -236,9 +263,8 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
                     LocalDateTime now = LocalDateTime.now();
 
                     String message = "[" + dtf.format(now) + "] " + currentUser.getDisplayName() + ": " + pop_CHT_ET.getText().toString();
-
-                    clickedLesson.getMsgs().add(message);
-                    messagesLv.requestLayout();
+                    clickedLesson.addMessage(message);
+                    //currentMsgs.add(message);
                     pop_CHT_ET.getText().clear();
 
 
@@ -247,33 +273,13 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
                             .getDatabaseReference(Constants.KEY_LESSON)
                             .child(String.valueOf(pos))
                             .child(Constants.KEY_CHAT)
-                            .setValue(clickedLesson.getMsgs());
+                            .setValue(clickedLesson.getChatMsgs());
 
-//                    switch(typeOfUser)
-//                    {
-//                        case STUDENT:
-//                            FireBaseOperations
-//                                    .getInstance()
-//                                    .getDatabaseReference(Constants.KEY_STUDENT)
-//                                    .child(currentUser.getUid())
-//                                    .child(Constants.KEY_MY_LESSONS)
-//                                    .child(String.valueOf(pos))
-//                                    .child(Constants.KEY_CHAT)
-//                                    .setValue(clickedLesson.getMsgs());
-//                            break;
-//                        case TEACHER:
-//                            FireBaseOperations
-//                                    .getInstance()
-//                                    .getDatabaseReference(Constants.KEY_TEACHER)
-//                                    .child(currentUser.getUid())
-//                                    .child(Constants.KEY_MY_LESSONS)
-//                                    .child(String.valueOf(pos))
-//                                    .child(Constants.KEY_CHAT)
-//                                    .setValue(clickedLesson.getMsgs());
-//                            break;
-//                    }
+                    //messagesLv.invalidateViews();
+                    clickedLesson.getLessonListView().invalidateViews();
                 }
             });
+
         }
     }
 }

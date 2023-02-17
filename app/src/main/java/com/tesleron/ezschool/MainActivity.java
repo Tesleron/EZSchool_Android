@@ -5,6 +5,7 @@ package com.tesleron.ezschool;
 import static com.tesleron.ezschool.LoginActivity.currentUser;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,12 +36,10 @@ import java.util.Observable;
 public class MainActivity extends AppCompatActivity {
     private MaterialTextView main_LBL_username;
     private RecyclerView main_LST_classes;
-//    private ArrayList<Lesson> aLessons;
     private Adapter_Class adapter_class;
-    private ImageButton main_BTN_signout;
-//    public static int typeOfUser; // 0 -> student, 1 -> teacher
+    private AppCompatImageButton main_BTN_signout;
 
-    public static TypeOfUser typeOfUser;
+    public static TypeOfUser typeOfUser;// 0 -> student, 1 -> teacher
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,19 +52,12 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         updateTitleOnScreen();
 
+        LessonStorage.getInstance().getClasses().observe(this, observer);
+
     }
 
     private void initViews() {
-//        switch (typeOfUser)
-//        {
-//            case STUDENT:
-//                //aLessons = StudentUser.getInstance().getClasses();
-//                aLessons = LessonStorage.getInstance().getClasses();
-//                break;
-//            case TEACHER:
-//                aLessons = LessonStorage.getInstance().getClasses();
-////                aLessons = TeacherUser.getInstance().getClasses();
-//        }
+
         adapter_class = new Adapter_Class(this/*, LessonStorage.getInstance().getClasses(), findViewById(R.id.activity_main), getSystemService(LAYOUT_INFLATER_SERVICE)*/);
         main_LST_classes.setLayoutManager(new LinearLayoutManager(this));
         main_LST_classes.setAdapter(adapter_class);
@@ -84,14 +76,12 @@ public class MainActivity extends AppCompatActivity {
         main_LBL_username.setText(name);
     }
 
-//    Observer<ArrayList<Lesson>> observer = new Observer<ArrayList<Lesson>>() {
-//
-//
-//        @Override
-//        public void onChanged(ArrayList<Lesson> newLessons) {
-//            adapter_class.updateLessons(newLessons);
-//        }
-//    };
+    Observer<ArrayList<Lesson>> observer = new Observer<ArrayList<Lesson>>() {
+        @Override
+        public void onChanged(ArrayList<Lesson> lessons) {
+            adapter_class.updateLessons(lessons);
+        }
+    };
 
     private void signOut() {
         FirebaseAuth.getInstance().signOut();
@@ -105,11 +95,9 @@ public class MainActivity extends AppCompatActivity {
         switch (typeOfUser) {
             case STUDENT: // student
                 StudentUser.getInstance().setDisplayName(null);
-                //StudentUser.getInstance().setClasses(new ArrayList<>());
                 break;
             case TEACHER: // teacher
                 TeacherUser.getInstance().setDisplayName(null);
-                //TeacherUser.getInstance().setClasses(new ArrayList<>());
         }
     }
 

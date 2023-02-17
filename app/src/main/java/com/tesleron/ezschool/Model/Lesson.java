@@ -1,5 +1,8 @@
 package com.tesleron.ezschool.Model;
 
+import android.app.Dialog;
+import android.widget.ListView;
+
 import java.util.ArrayList;
 
 public class Lesson {
@@ -8,6 +11,8 @@ public class Lesson {
     private int endTime;
     private ArrayList<String> notes;
     private ArrayList<String> chatMsgs;
+    private ListView lessonListView;
+
 
     public Lesson(){
         notes = new ArrayList<>();
@@ -45,8 +50,18 @@ public class Lesson {
         return notes;
     }
 
-    public ArrayList<String> getMsgs() {
+    public Lesson setNotes(ArrayList<String> notes) {
+        this.notes = notes;
+        return this;
+    }
+
+    public ArrayList<String> getChatMsgs() {
         return chatMsgs;
+    }
+
+    public Lesson setChatMsgs(ArrayList<String> chatMsgs) {
+        this.chatMsgs = chatMsgs;
+        return this;
     }
 
     public Lesson addNote(String note) {
@@ -54,9 +69,16 @@ public class Lesson {
         return this;
     }
 
-
-    public Lesson setNotes(ArrayList<String> notes) {
-        this.notes = notes;
+    public Lesson addMessage(String msg) {
+        chatMsgs.add(msg);
         return this;
+    }
+
+    public ListView getLessonListView() {
+        return lessonListView;
+    }
+
+    public void setLessonListView(Dialog dialog, int id) {
+        lessonListView = dialog.findViewById(id);
     }
 }

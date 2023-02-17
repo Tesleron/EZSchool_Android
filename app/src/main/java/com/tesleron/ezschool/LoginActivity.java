@@ -45,7 +45,6 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isStudent;
     private boolean isTeacher;
 
- //   public final static String
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,63 +61,61 @@ public class LoginActivity extends AppCompatActivity {
                 .setName("History")
                 .setStartTime(8)
                 .setEndTime(10)
-                .addNote("Bring history book")
+              //  .addNote("Bring history book")
+              //  .addMessage(" ")
         );
 
         aLessons.add(new Lesson()
                 .setName("Algebra")
                 .setStartTime(10)
                 .setEndTime(11)
-                .addNote("")
+              //  .addNote("")
+              //  .addMessage(" ")
         );
 
         aLessons.add(new Lesson()
                 .setName("Literature")
                 .setStartTime(11)
                 .setEndTime(12)
-                .addNote("Bring book")
+              // .addNote("Bring book")
+              // .addMessage(" ")
         );
 
         aLessons.add(new Lesson()
                 .setName("Computer Science")
                 .setStartTime(12)
                 .setEndTime(14)
-                .addNote("Bring computers")
+              // .addNote("Bring computers")
+              // .addMessage(" ")
         );
 
         aLessons.add(new Lesson()
                 .setName("Culture")
                 .setStartTime(14)
                 .setEndTime(15)
-                .addNote("Starting project today :)")
+              // .addNote("Starting project today :)")
+              // .addMessage(" ")
         );
 
         aLessons.add(new Lesson()
                 .setName("Language")
                 .setStartTime(15)
                 .setEndTime(16)
-                .addNote("Bring tongue book")
+               // .addNote("Bring tongue book")
+               // .addMessage(" ")
         );
 
         aLessons.add(new Lesson()
                 .setName("Sports")
                 .setStartTime(16)
                 .setEndTime(18)
-                .addNote("Bring towels")
+              //  .addNote("Bring towels")
+              //  .addMessage(" ")
         );
 
-        FireBaseOperations.getInstance().getDatabaseReference("Lesson").setValue(aLessons);
+        FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_LESSON).setValue(aLessons);
     }
 
-
-
-//        FirebaseDatabase db = FirebaseDatabase.getInstance();
-//        DatabaseReference garageRef = db.getReference("garage");
-//        garageRef.setValue(garage);
-
-
-
-    // See: https://developer.android.com/training/basics/intents/result
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
             new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
@@ -131,7 +128,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         Log.d("pttt","reached here after login session");
-       // switchActivity();
     }
 
 
@@ -150,8 +146,6 @@ public class LoginActivity extends AppCompatActivity {
                     .build();
             signInLauncher.launch(signInIntent);
         } else { // found in DB, initializing
-//            StudentUser.init(currentUser);
-//            TeacherUser.init(currentUser);
             checkAlreadyExists();
         }
     }
@@ -171,7 +165,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 StudentUser.getInstance().setUser(snapshot.getValue(UserDB.class));
-//                StudentUser.getInstance().setClasses(snapshot.getValue(ArrayList.class));
             }
 
             @Override
@@ -179,27 +172,6 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-
-        DatabaseReference finalReference = reference;
-        lessonReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //LessonStorage.getInstance().getClasses().clear();
-                for (DataSnapshot snap:snapshot.getChildren()) {
-                    Lesson l = snap.getValue(Lesson.class);
-                    LessonStorage.getInstance().getClasses().add(l);
-                    //StudentUser.getInstance().getClasses().add(l);
-                }
-                   // finalReference.child(Constants.KEY_MY_LESSONS).setValue(StudentUser.getInstance().getClasses());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-  //      switchActivity(0);
         switchActivity(TypeOfUser.STUDENT);
     }
 
@@ -217,26 +189,6 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-
-        DatabaseReference finalReference = reference;
-        lessonReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //LessonStorage.getInstance().getClasses().clear();
-                for (DataSnapshot snap:snapshot.getChildren()) {
-                    Lesson l = snap.getValue(Lesson.class);
-                    LessonStorage.getInstance().getClasses().add(l);
-                    //TeacherUser.getInstance().getClasses().add(l);
-                }
-                    //finalReference.child(Constants.KEY_MY_LESSONS).setValue(TeacherUser.getInstance().getClasses());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
         switchActivity(TypeOfUser.TEACHER);
     }
 

@@ -26,17 +26,18 @@
             android:orientation="horizontal"
             android:layout_weight="1"
             >
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/type_LBL_title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
-                android:text="Which user are you?"
                 android:gravity="center"
+                android:text="Which user are you?"
+                android:textColor="#395EA8"
                 android:textSize="30sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                ></com.google.android.material.textview.MaterialTextView>
+
+                app:fontFamily="@font/wendy_one"></com.google.android.material.textview.MaterialTextView>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -65,13 +66,13 @@
                     android:id="@+id/type_BTN_pupil"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:backgroundTint="#4AFFFDD0"
                     android:layout_below="@id/type_IMG_pupil"
                     android:layout_marginStart="40dp"
-                    android:text="Student"
                     android:layout_marginTop="15dp"
-                    >
+                    android:layout_marginEnd="20dp"
+                    android:backgroundTint="#4AFFFDD0"
+                    android:fontFamily="@font/wendy_one"
+                    android:text="Student">
 
                 </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
 
@@ -84,19 +85,19 @@
                     android:layout_marginEnd="50dp"
                     ></androidx.appcompat.widget.AppCompatImageView>
 
-                    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                        android:id="@+id/type_BTN_teacher"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="#4AFFFDD0"
-                        android:text="Teacher"
-                        android:layout_below="@id/type_IMG_teacher"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="40dp"
-                        android:layout_marginTop="15dp"
-                        >
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/type_BTN_teacher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/type_IMG_teacher"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="40dp"
+                    android:backgroundTint="#4AFFFDD0"
+                    android:fontFamily="@font/wendy_one"
+                    android:text="Teacher">
 
-                    </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
+                </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
             </RelativeLayout>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -124,7 +125,8 @@
                     android:layout_marginEnd="20dp"
                     app:lottie_rawRes="@raw/pupil_animation"
                     app:lottie_speed="1"
-                    app:lottie_repeatMode="restart"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
                     />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -144,6 +146,8 @@
                     app:lottie_rawRes="@raw/teacher_animation"
                     app:lottie_speed="1"
                     app:lottie_repeatMode="restart"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
                     />
             </androidx.appcompat.widget.LinearLayoutCompat>
 

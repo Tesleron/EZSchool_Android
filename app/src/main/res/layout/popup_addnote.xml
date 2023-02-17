@@ -13,7 +13,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#C2E3AA"
         >
+
 
         <EditText
             android:id="@+id/pop_ET_note"
@@ -29,7 +31,7 @@
             android:layout_below="@id/pop_ET_note"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="65dp"
             android:orientation="horizontal">
 
             <ImageButton

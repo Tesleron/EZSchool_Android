@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -48,7 +49,10 @@ public class UserTypeActivity extends AppCompatActivity {
         initViews();
 
         lottieAnimationViewPupil.resumeAnimation();
+        lottieAnimationViewPupil.setRepeatCount(LottieDrawable.INFINITE);
         lottieAnimationViewTeacher.resumeAnimation();
+        lottieAnimationViewTeacher.setRepeatCount(LottieDrawable.INFINITE);
+
     }
 
     private void initViews() {
@@ -56,61 +60,17 @@ public class UserTypeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 StudentUser.init(currentUser);
- //               StudentUser.getInstance().setClasses(DataManager.getClasses());
                 studentReference.child(currentUser.getUid()).setValue(StudentUser.getInstance());
-
-                DatabaseReference finalReference = studentReference.child(currentUser.getUid());
-                lessonReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        //LessonStorage.getInstance().getClasses().clear();
-                        for (DataSnapshot snap:snapshot.getChildren()) {
-                            Lesson l = snap.getValue(Lesson.class);
-                            LessonStorage.getInstance().getClasses().add(l);
-                           // StudentUser.getInstance().getClasses().add(l);
-                        }
-                       // finalReference.child(Constants.KEY_MY_LESSONS).setValue(StudentUser.getInstance().getClasses());
-                        switchActivity(TypeOfUser.STUDENT);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
+                switchActivity(TypeOfUser.STUDENT);
             }
         });
 
         type_BTN_teacher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 TeacherUser.init(currentUser);
- //               TeacherUser.getInstance().setClasses(DataManager.getClasses());
                 teacherReference.child(currentUser.getUid()).setValue(TeacherUser.getInstance());
-
-                DatabaseReference finalReference = teacherReference.child(currentUser.getUid());
-                lessonReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        //LessonStorage.getInstance().getClasses().clear();
-                        for (DataSnapshot snap:snapshot.getChildren()) {
-                            Lesson l = snap.getValue(Lesson.class);
-                            LessonStorage.getInstance().getClasses().add(l);
-                            //TeacherUser.getInstance().getClasses().add(l);
-                        }
-                        //finalReference.child(Constants.KEY_MY_LESSONS).setValue(TeacherUser.getInstance().getClasses());
-                        switchActivity(TypeOfUser.TEACHER);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-
+                switchActivity(TypeOfUser.TEACHER);
             }
         });
     }

@@ -18,6 +18,14 @@
         app:cardElevation="12dp"
         app:cardCornerRadius="40dp">
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/pop_IMG_chatbackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#C2E3AA"
+            android:alpha="0.6"
+            />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -29,9 +37,10 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"
                 android:text="Tap a note to delete"
-                android:textColor="#D0000000"
+                android:textColor="#4D65E8"
+                android:layout_marginTop="15dp"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                app:fontFamily="@font/barrio" />
 
             <ListView
                 android:id="@+id/pop_LST_notes"
