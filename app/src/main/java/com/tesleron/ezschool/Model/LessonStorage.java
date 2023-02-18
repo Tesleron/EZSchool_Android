@@ -1,6 +1,7 @@
 package com.tesleron.ezschool.Model;
 
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +24,8 @@ public class LessonStorage extends Observable {
     private static LessonStorage lessonStorage = null;
     private MutableLiveData<ArrayList<Lesson>> lessons;
     DatabaseReference lessonReference = FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_LESSON);
+    private ArrayAdapter<String> currentOpenAdapter;
+    private int currentIndexOnOpenedLesson;
 
     private LessonStorage() {
         lessons = new MutableLiveData<>();
@@ -40,17 +43,7 @@ public class LessonStorage extends Observable {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//                Lesson l = snapshot.getValue(Lesson.class);
-//                theLessons.add(l);
-//                lessons.setValue(theLessons);
-//                Lesson l = snapshot.getValue(Lesson.class);
-//                for (Lesson lesson : theLessons){
-//                    if (lesson.getName().equals(l.getName())) {
-//                        int index = theLessons.indexOf(lesson);
-//                        theLessons.set(index, l);
-//                    }
-//                }
-//                        lessons.setValue(theLessons);
+
             }
 
 
@@ -82,8 +75,13 @@ public class LessonStorage extends Observable {
                     Log.d("pttt", l.getChatMsgs().toString());
                 }
                 LessonStorage.getInstance().setLessons(lessons);
+                if (currentOpenAdapter != null)
+                {
+                    currentOpenAdapter.clear();
+                    currentOpenAdapter.addAll(lessons.get(currentIndexOnOpenedLesson).getChatMsgs());
+                    currentOpenAdapter.notifyDataSetChanged();
+                }
 
-                //finalReference.child(Constants.KEY_MY_LESSONS).setValue(TeacherUser.getInstance().getClasses());
             }
 
             @Override
@@ -110,4 +108,15 @@ public class LessonStorage extends Observable {
         lessons.setValue(newLessons);
     }
 
+    public ArrayAdapter<String> getCurrentOpenAdapter() {
+        return currentOpenAdapter;
+    }
+
+    public void setCurrentOpenAdapter(ArrayAdapter<String> currentOpenAdapter) {
+        this.currentOpenAdapter = currentOpenAdapter;
+    }
+
+    public void setCurrentIndexOnOpenedLesson(int pos) {
+        currentIndexOnOpenedLesson = pos;
+    }
 }

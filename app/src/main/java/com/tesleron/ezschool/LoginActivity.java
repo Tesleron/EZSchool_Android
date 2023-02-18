@@ -192,6 +192,9 @@ public class LoginActivity extends AppCompatActivity {
         switchActivity(TypeOfUser.TEACHER);
     }
 
+    /**
+     * Checks whether the user is listed in the DB, or creates a new user entirely
+     */
     private void checkAlreadyExists() {
         Query studentQuery = studentReference; // need to see which reference is this
         Query teacherQuery = teacherReference;
@@ -244,11 +247,10 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void createNewUserDB() { // need to see which reference is this
-        Intent intent = new Intent(this, UserTypeActivity.class); // if the user is completely new, ask what type of user he is.
+    private void createNewUserDB() {
+        Intent intent = new Intent(this, UserTypeActivity.class);
         startActivity(intent);
         finish();
-        // TEMPORARY!!
     }
 
 

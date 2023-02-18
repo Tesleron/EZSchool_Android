@@ -5,6 +5,7 @@ import static com.tesleron.ezschool.MainActivity.typeOfUser;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.Gravity;
@@ -45,15 +46,12 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
     private ArrayList<Lesson> aLessons;
     private DatabaseReference ref = FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_LESSON);
 
-    private Handler handler;
-    private Runnable runnable;
+
 
 
     public Adapter_Class(Context context) {
         this.context = context;
         aLessons = new ArrayList<>();
-        handler = new Handler();
-        handler.postDelayed(runnable, 10); // start refreshing every 10ms, which is all the time
     }
 
     @Override
@@ -68,8 +66,14 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
         Lesson aLesson = getItem(position);
         holder.list_LBL_name.setText(aLesson.getName());
         holder.list_LBL_duration.setText(MyStringUtils.getDurationFromation(aLesson.getStartTime()) + "-" + MyStringUtils.getDurationFromation(aLesson.getEndTime()));
-        holder.list_LBL_teachernotes.setText(aLesson.getNotes().toString());
-
+        if (aLesson.getNotes().isEmpty())
+        {
+            holder.list_LBL_teachernotes.setText("Teacher's notes: N/A");
+        }
+        else
+        {
+            holder.list_LBL_teachernotes.setText("Teacher's notes: " + aLesson.getNotes().toString());
+        }
     }
 
     private Lesson getItem(int position) {
@@ -83,16 +87,11 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
 
     public void updateLessons(final ArrayList<Lesson> newLessons) {
         aLessons = newLessons;
-//        runnable = new Runnable() {
-//            @Override
-//            public void run() {
-//                for (Lesson l : aLessons)
-//                {
-//                    if (l.getLessonListView() != null)
-//                        l.getLessonListView().invalidateViews();
-//                }
-//            }
-//        };
+        //raise flag, notfify for the currently opened adapter, if it is opened
+        if (LessonStorage.getInstance().getCurrentOpenAdapter() != null)
+        {
+            LessonStorage.getInstance().getCurrentOpenAdapter().notifyDataSetChanged();
+        }
         notifyDataSetChanged();
     }
 
@@ -218,8 +217,6 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
 
                     MySignal.getInstance().toast("Successfully deleted note");
 
-                    //                   notifyDataSetChanged();
-
                     // update FB on whats happening
                     FireBaseOperations.getInstance()
                             .getDatabaseReference(Constants.KEY_LESSON)
@@ -236,7 +233,7 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
         private void initChatPopup() {
             pos = getAdapterPosition();
             Lesson clickedLesson = aLessons.get(pos);
-            ArrayList<String> currentMsgs = clickedLesson.getChatMsgs(); // load from DB instead
+            ArrayList<String> currentMsgs = clickedLesson.getChatMsgs();
             // open the popup
             final Dialog dialog = new Dialog(context);
             dialog.setContentView(R.layout.popup_chatroom);
@@ -250,7 +247,11 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
 
             pop_CHT_title.setText(clickedLesson.getName() + " chat room!");
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.row_in_listview, currentMsgs); // should instead load from DB
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(dialog.getContext(), R.layout.row_in_listview, currentMsgs);
+            LessonStorage.getInstance().setCurrentOpenAdapter(adapter);
+            LessonStorage.getInstance().setCurrentIndexOnOpenedLesson(pos);
+            //set this adapter to the global variable, and raise the flag
+
             //messagesLv.setAdapter(adapter);
             clickedLesson.getLessonListView().setAdapter(adapter);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -264,6 +265,10 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
 
                     String message = "[" + dtf.format(now) + "] " + currentUser.getDisplayName() + ": " + pop_CHT_ET.getText().toString();
                     clickedLesson.addMessage(message);
+                    LessonStorage.getInstance().setCurrentOpenAdapter(new ArrayAdapter<String>(dialog.getContext(), R.layout.row_in_listview, clickedLesson.getChatMsgs()));
+                    clickedLesson.getLessonListView().setAdapter(LessonStorage.getInstance().getCurrentOpenAdapter());
+                    LessonStorage.getInstance().getCurrentOpenAdapter().notifyDataSetChanged();
+
                     //currentMsgs.add(message);
                     pop_CHT_ET.getText().clear();
 
@@ -279,6 +284,14 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
                     clickedLesson.getLessonListView().invalidateViews();
                 }
             });
+
+            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    LessonStorage.getInstance().setCurrentOpenAdapter(null);
+                }
+            });
+            //add dialog dismiss lsitener to make the current adapter nnull
 
         }
     }
