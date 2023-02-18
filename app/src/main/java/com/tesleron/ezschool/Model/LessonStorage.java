@@ -1,5 +1,7 @@
 package com.tesleron.ezschool.Model;
 
+import static com.tesleron.ezschool.LoginActivity.currentUser;
+
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
@@ -16,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.tesleron.ezschool.MyUtils.Constants;
 import com.tesleron.ezschool.MyUtils.FireBaseOperations;
+import com.tesleron.ezschool.MyUtils.MySignal;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -80,6 +83,7 @@ public class LessonStorage extends Observable {
                     currentOpenAdapter.clear();
                     currentOpenAdapter.addAll(lessons.get(currentIndexOnOpenedLesson).getChatMsgs());
                     currentOpenAdapter.notifyDataSetChanged();
+                    MySignal.getInstance().toast(currentUser.getDisplayName() + " sent a new message in: " + lessons.get(currentIndexOnOpenedLesson).getName());
                 }
 
             }
