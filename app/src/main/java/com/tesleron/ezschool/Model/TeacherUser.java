@@ -8,11 +8,9 @@ public class TeacherUser extends UserDB {
     private static TeacherUser teacherUser = null;
 
     private TeacherUser(){
-//        lessons = new ArrayList<>();
     }
 
     private TeacherUser(FirebaseUser currentUser){
-    //    lessons = new ArrayList<>();
         displayName = currentUser.getDisplayName();
     }
 

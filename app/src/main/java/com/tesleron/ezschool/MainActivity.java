@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
 
-        adapter_class = new Adapter_Class(this/*, LessonStorage.getInstance().getClasses(), findViewById(R.id.activity_main), getSystemService(LAYOUT_INFLATER_SERVICE)*/);
+        adapter_class = new Adapter_Class(this);
         main_LST_classes.setLayoutManager(new LinearLayoutManager(this));
         main_LST_classes.setAdapter(adapter_class);
 

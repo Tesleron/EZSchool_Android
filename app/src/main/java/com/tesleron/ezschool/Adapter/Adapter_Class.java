@@ -239,7 +239,6 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
             final Dialog dialog = new Dialog(context);
             dialog.setContentView(R.layout.popup_chatroom);
             dialog.setTitle("Chat Room");
-            //ListView messagesLv = (ListView) dialog.findViewById(R.id.pop_CHT_msgs);
             clickedLesson.setLessonListView(dialog, R.id.pop_CHT_msgs);
 
             TextView pop_CHT_title = dialog.findViewById(R.id.pop_CHT_title);
@@ -253,7 +252,6 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
             LessonStorage.getInstance().setCurrentIndexOnOpenedLesson(pos);
             //set this adapter to the global variable, and raise the flag
 
-            //messagesLv.setAdapter(adapter);
             clickedLesson.getLessonListView().setAdapter(adapter);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             dialog.show();
@@ -270,7 +268,6 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
                     clickedLesson.getLessonListView().setAdapter(LessonStorage.getInstance().getCurrentOpenAdapter());
                     LessonStorage.getInstance().getCurrentOpenAdapter().notifyDataSetChanged();
 
-                    //currentMsgs.add(message);
                     pop_CHT_ET.getText().clear();
 
 
@@ -281,7 +278,6 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
                             .child(Constants.KEY_CHAT)
                             .setValue(clickedLesson.getChatMsgs());
 
-                    //messagesLv.invalidateViews();
                     clickedLesson.getLessonListView().invalidateViews();
                 }
             });

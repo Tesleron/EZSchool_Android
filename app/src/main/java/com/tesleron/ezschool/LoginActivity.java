@@ -52,69 +52,8 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_login);
         LessonStorage.init();
-//        saveGarage();
     }
 
-    private void saveGarage(){
-        ArrayList<Lesson> aLessons = new ArrayList<>();
-        aLessons.add(new Lesson()
-                .setName("History")
-                .setStartTime(8)
-                .setEndTime(10)
-              //  .addNote("Bring history book")
-              //  .addMessage(" ")
-        );
-
-        aLessons.add(new Lesson()
-                .setName("Algebra")
-                .setStartTime(10)
-                .setEndTime(11)
-              //  .addNote("")
-              //  .addMessage(" ")
-        );
-
-        aLessons.add(new Lesson()
-                .setName("Literature")
-                .setStartTime(11)
-                .setEndTime(12)
-              // .addNote("Bring book")
-              // .addMessage(" ")
-        );
-
-        aLessons.add(new Lesson()
-                .setName("Computer Science")
-                .setStartTime(12)
-                .setEndTime(14)
-              // .addNote("Bring computers")
-              // .addMessage(" ")
-        );
-
-        aLessons.add(new Lesson()
-                .setName("Culture")
-                .setStartTime(14)
-                .setEndTime(15)
-              // .addNote("Starting project today :)")
-              // .addMessage(" ")
-        );
-
-        aLessons.add(new Lesson()
-                .setName("Language")
-                .setStartTime(15)
-                .setEndTime(16)
-               // .addNote("Bring tongue book")
-               // .addMessage(" ")
-        );
-
-        aLessons.add(new Lesson()
-                .setName("Sports")
-                .setStartTime(16)
-                .setEndTime(18)
-              //  .addNote("Bring towels")
-              //  .addMessage(" ")
-        );
-
-        FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_LESSON).setValue(aLessons);
-    }
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),

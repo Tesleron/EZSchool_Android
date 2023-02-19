@@ -38,8 +38,6 @@ public class LessonStorage extends Observable {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Lesson l = snapshot.getValue(Lesson.class);
-//                Log.d("pttt", l.getNotes().toString());
-//                Log.d("pttt", l.getMsgs().toString());
                 theLessons.add(l);
                 lessons.setValue(theLessons);
             }
@@ -69,7 +67,6 @@ public class LessonStorage extends Observable {
         lessonReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //LessonStorage.getInstance().getClasses().clear();
                 ArrayList<Lesson> lessons = new ArrayList<>();
                 for (DataSnapshot snap:snapshot.getChildren()) {
                     Lesson l = snap.getValue(Lesson.class);
