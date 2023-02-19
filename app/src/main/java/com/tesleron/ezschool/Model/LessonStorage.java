@@ -83,7 +83,6 @@ public class LessonStorage extends Observable {
                     currentOpenAdapter.clear();
                     currentOpenAdapter.addAll(lessons.get(currentIndexOnOpenedLesson).getChatMsgs());
                     currentOpenAdapter.notifyDataSetChanged();
-                    MySignal.getInstance().toast(currentUser.getDisplayName() + " sent a new message in: " + lessons.get(currentIndexOnOpenedLesson).getName());
                 }
 
             }

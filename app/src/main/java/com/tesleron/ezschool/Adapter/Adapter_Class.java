@@ -105,6 +105,7 @@ public class Adapter_Class extends RecyclerView.Adapter<Adapter_Class.ClassViewH
         private final ImageButton list_IMG_delete;
         private final MaterialTextView list_LBL_deletenote;
         private final ImageButton list_IMG_chat;
+
         private int pos;
         private DatabaseReference lessonReference = FireBaseOperations.getInstance().getDatabaseReference(Constants.KEY_LESSON);
 

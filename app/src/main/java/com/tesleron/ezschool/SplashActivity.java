@@ -1,9 +1,13 @@
 package com.tesleron.ezschool;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import android.animation.Animator;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -43,4 +47,6 @@ public class SplashActivity extends AppCompatActivity {
     private void findViews() {
         lottieAnimationView = findViewById(R.id.animation_view);
     }
+
+
 }
